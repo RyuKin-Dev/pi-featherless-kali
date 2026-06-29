@@ -1,25 +1,4 @@
 #!/usr/bin/env tsx
-/**
- * Featherless Model Tool Calling Evaluator
- *
- * Usage:
- *   npx tsx evaluate-models.ts "reposcroll/RWKV-6-14B" "Qwen/QwQ-32B"
- *   npx tsx evaluate-models.ts --file models.json
- *   npx tsx evaluate-models.ts --config custom-config.json
- *
- * Input formats:
- *   - Model ID: "org/model-name"
- *   - URL: "https://featherless.ai/models/org/model-name"
- *
- * Config file (JSON):
- *   {
- *     "models": [
- *       { "id": "org/model", "params": { "temperature": 0.7, "top_p": 0.95 } }
- *     ],
- *     "scenarios": ["hello", "read", "json", "selfcontrol", "pipeline", "calc"],
- *     "output": "results/run-20250101.json"
- *   }
- */
 
 import { config } from 'dotenv';
 config();
@@ -35,9 +14,7 @@ if (!API_KEY) {
 
 const client = new OpenAI({ apiKey: API_KEY, baseURL: 'https://api.featherless.ai/v1' });
 
-// ============================================================================
 // CONFIGURATION
-// ============================================================================
 
 type ModelParams = {
   temperature?: number;
@@ -170,9 +147,7 @@ const TOOLS = [
   },
 ];
 
-// ============================================================================
 // LOGIC
-// ============================================================================
 
 interface ScenarioResult {
   scenario: ScenarioKey;
@@ -265,9 +240,7 @@ async function evaluateModel(entry: ModelEntry, scenarioFilter?: ScenarioKey[]):
   };
 }
 
-// ============================================================================
 // INPUT HANDLING
-// ============================================================================
 
 function loadConfigFromArgs(): EvaluationConfig | null {
   const args = process.argv.slice(2);
@@ -310,9 +283,7 @@ function loadConfigFromArgs(): EvaluationConfig | null {
   return { models: cleanArgs.map(parseModelInput) };
 }
 
-// ============================================================================
 // OUTPUT
-// ============================================================================
 
 function generateMarkdownReport(results: ModelResult[]): string {
   let md = `# Tool Calling Evaluation Report\n\n`;
@@ -378,9 +349,7 @@ function saveResults(results: ModelResult[], config: EvaluationConfig) {
   console.log(`   Markdown: ${mdPath}`);
 }
 
-// ============================================================================
 // MAIN
-// ============================================================================
 
 (async () => {
   console.log("\n" + "=".repeat(80));

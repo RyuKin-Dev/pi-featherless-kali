@@ -1,12 +1,4 @@
-/**
- * Model definitions for pi-featherless-2.
- *
- * Model concurrency costs are based on Featherless AI plan allotments:
- * - 7B to 15B: Cost 1
- * - 24B to 34B: Cost 2
- * - 70B to 72B: Cost 4
- * - DeepSeek V3/R1 & Kimi-K2: Cost 4
- */
+
 
 interface ModelClass {
     context_limit: number;

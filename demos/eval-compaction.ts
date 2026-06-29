@@ -1,13 +1,4 @@
-/**
- * Advanced Compaction Strategy Evaluator
- *
- * Tests different chunking strategies and multiple models to find the optimal
- * balance between speed and quality for Featherless AI.
- * Logs full results to markdown files for inspection.
- *
- * Run:
- *   npx tsx demos/eval-compaction.ts [session_path]
- */
+
 
 import { readFileSync, existsSync, writeFileSync, mkdirSync } from "fs";
 import { resolve, dirname, join } from "path";
@@ -20,7 +11,6 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// --- Environment Setup ---
 for (const rel of ["../../.env", "../.env"]) {
     const p = resolve(__dirname, rel);
     if (existsSync(p)) {
@@ -46,8 +36,6 @@ const TEST_MODELS = [
 ];
 
 const CHUNK_SIZE_CHARS = 15000;
-
-// --- Utilities ---
 
 function estimateTokens(text: string): number {
     return Math.ceil(text.length / 3.2);

@@ -1,13 +1,7 @@
 #!/usr/bin/env node
-/**
- * Tools to sync models from Featherless API
- */
 
 const BASE_URL = "https://api.featherless.ai/v1";
 
-/**
- * Fetch the models JSON from Featherless API.
- */
 export async function fetchModelsJson(): Promise<string> {
     const response = await fetch(`${BASE_URL}/models`, {
         credentials: "include",

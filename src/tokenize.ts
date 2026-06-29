@@ -1,40 +1,17 @@
-/**
- * Tokenization utilities for Featherless AI.
- *
- * Uses the Featherless /v1/tokenize API endpoint for accurate token counting.
- * Results are cached in memory to minimize API calls.
- */
+
 
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
 const TOKENIZE_URL = "https://api.featherless.ai/v1/tokenize";
 
-/**
- * In-memory cache for token counts.
- * Key: `${model}:${text}` -> token count
- */
 const tokenCache = new Map<string, number>();
 
-/**
- * Maximum cache size (entries). LRU eviction when exceeded.
- */
 const MAX_CACHE_SIZE = 10000;
 
-/**
- * Compute a cache key for a model + text combination.
- */
 function cacheKey(model: string, text: string): string {
     return `${model}:${text}`;
 }
 
-/**
- * Tokenize text using the Featherless API.
- *
- * @param model - The model ID to use for tokenization
- * @param text - The text to tokenize
- * @param apiKey - Optional API key (will be resolved if not provided)
- * @returns The number of tokens
- */
 export async function tokenize(
     model: string,
     text: string,
@@ -91,14 +68,6 @@ export async function tokenize(
     return count;
 }
 
-/**
- * Tokenize multiple texts in batch (more efficient for context estimation).
- *
- * @param model - The model ID to use for tokenization
- * @param texts - Array of texts to tokenize
- * @param apiKey - Optional API key
- * @returns Array of token counts (same order as input)
- */
 export async function tokenizeBatch(
     model: string,
     texts: string[],
@@ -138,15 +107,6 @@ export async function tokenizeBatch(
     return results;
 }
 
-/**
- * Simple heuristic token estimation.
- *
- * Uses content-type-aware estimation:
- * - Bash output (ls, file listings): ~1.8 chars/token
- * - Default: ~3.2 chars/token (measured average across content types)
- *
- * This is more accurate than chars/4 which underestimates by ~27%.
- */
 export function estimateTokens(
     text: string,
     defaultCharsPerToken = 3.2,
@@ -172,9 +132,6 @@ export function estimateTokens(
     return Math.ceil(chars / defaultCharsPerToken);
 }
 
-/**
- * Extract text content from a message for token counting.
- */
 export function extractText(message: any): string {
     switch (message.role) {
         case "user": {
@@ -220,14 +177,6 @@ export function extractText(message: any): string {
     }
 }
 
-/**
- * Count tokens for a single message using the Featherless API.
- *
- * @param model - The model ID to use
- * @param message - The message to count tokens for
- * @param apiKey - Optional API key
- * @returns Token count for the message
- */
 export async function countMessageTokens(
     model: string,
     message: any,
@@ -238,14 +187,6 @@ export async function countMessageTokens(
     return tokenize(model, text, apiKey);
 }
 
-/**
- * Count tokens for multiple messages.
- *
- * @param model - The model ID to use
- * @param messages - Array of messages
- * @param apiKey - Optional API key
- * @returns Total token count
- */
 export async function countMessagesTokens(
     model: string,
     messages: any[],
@@ -259,16 +200,10 @@ export async function countMessagesTokens(
     return counts.reduce((sum, n) => sum + n, 0);
 }
 
-/**
- * Clear the token cache (useful for testing or memory management).
- */
 export function clearTokenCache(): void {
     tokenCache.clear();
 }
 
-/**
- * Get cache statistics.
- */
 export function getCacheStats(): { size: number; maxSize: number } {
     return {
         size: tokenCache.size,

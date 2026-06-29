@@ -1,12 +1,4 @@
-/**
- * High-performance compaction speed check demo.
- *
- * This demo replays the compaction logic on a real session file and measures
- * the performance of the new "Aggressive Stripping" and "Parallel" strategy.
- *
- * Run:
- *   npx tsx demos/check-compaction.ts
- */
+
 
 import { readFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
@@ -19,7 +11,6 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// --- Load .env from project root ---
 for (const rel of ["../../.env", "../.env"]) {
     const p = resolve(__dirname, rel);
     if (existsSync(p)) {
@@ -37,7 +28,6 @@ if (!API_KEY) {
     process.exit(1);
 }
 
-// --- Config ---
 const TARGET_SESSION =
     "/home/kit/.pi/agent/sessions/--home-kit-dev-AutoOps--/2026-04-07T14-59-05-177Z_0e74d8c9-ca93-4220-b67a-ecb31cf5ad85.jsonl";
 const FAST_MODEL_ID = "zai-org/GLM-4.7-Flash";
@@ -63,8 +53,6 @@ STRIP: ALL raw tool output (file contents, listings).`;
 const FINAL_MERGE_PROMPT = `Merge these 2 segment summaries into one HIGH-FIDELITY technical summary.
 RULES: Preserve exact file paths/errors. List active files. Record SUCCESS/FAILURE.
 \${summariesText}`;
-
-// --- Logic ---
 
 function stripToMetadata(messages: any[]): any[] {
     return messages.map((m) => {

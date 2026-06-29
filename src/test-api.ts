@@ -1,12 +1,4 @@
 #!/usr/bin/env node
-/**
- * Test script for pi-featherless extension
- * 
- * Usage:
- *   npx tsx src/test-api.ts ping      - Test API connectivity
- *   npx tsx src/test-api.ts chat      - Test chat completion
- *   npx tsx src/test-api.ts tools     - Test tool calling
- */
 
 const TIMEOUT_MS = 20000;
 const BASE_URL = "https://api.featherless.ai/v1";

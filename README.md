@@ -12,8 +12,10 @@
 | `package.json` devDeps | No TypeScript / tsx | Added `typescript` and `tsx` for typechecking and scripts |
 | Type-check command | Missing | `pnpm tsc --noEmit` now works |
 | Install script | None | `install-kali.sh` for global or project-local install |
+| Update script | None | `update-kali.sh` pulls latest changes, reinstalls, and re-runs tests |
+| Code style | File-level JSDoc and section-divider comments | Removed to avoid AI-typical comment patterns |
 
-All other files are mirrored 1:1 from the original repository.
+All functional source logic is preserved 1:1 from the original repository; only comments and build/install metadata were changed.
 
 ## Requirements
 
@@ -35,6 +37,24 @@ Project-local install:
 ```bash
 ./install-kali.sh --project /path/to/your/project
 ```
+
+## Update an existing install
+
+If you installed via `install-kali.sh`, the target directory is a git clone, so you can update in place:
+
+```bash
+chmod +x update-kali.sh
+./update-kali.sh
+```
+
+Project-local update:
+
+```bash
+./update-kali.sh --project /path/to/your/project
+```
+
+Skip verification with `--skip-tests`; discard local edits with `--force`.
+
 
 ## Manual install
 

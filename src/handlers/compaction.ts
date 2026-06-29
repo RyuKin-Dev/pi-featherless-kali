@@ -4,14 +4,6 @@ import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { convertToLlm } from "@mariozechner/pi-coding-agent";
 import { PROVIDER, getApiKey } from "./shared";
 
-/**
- * Simple Compaction Handler for Featherless AI.
- *
- * The model already has the full context in memory when compaction triggers.
- * Just ask it to summarize - no chunking, stripping, or separate model needed.
- * This is faster and preserves more information than complex preprocessing.
- */
-
 const SUMMARY_PROMPT = `Summarize the conversation so far. Focus on:
 - Files read/modified and key findings
 - Errors encountered and resolutions

@@ -1,12 +1,4 @@
-/**
- * Automated Tool Calling Model Evaluator
- *
- * Tests a list of models for tool calling capability and outputs results.
- * Separates configuration (model list) from logic (testing, reporting).
- *
- * Usage: npx tsx test-models.ts
- * Requires FEATHERLESS_API_KEY in .env or environment
- */
+
 
 import { config } from 'dotenv';
 config();
@@ -24,9 +16,8 @@ const client = new OpenAI({
   baseURL: 'https://api.featherless.ai/v1',
 });
 
-// ============================================================================
 // DATA: Model list (easy to add/remove models)
-// ============================================================================
+
 interface ModelConfig {
   id: string;
   short: string;
@@ -62,9 +53,7 @@ const TOOLS = [{
   },
 }];
 
-// ============================================================================
 // LOGIC: Model testing
-// ============================================================================
 
 type TestResult =
   | { status: "native"; tool_count: number }
@@ -125,9 +114,7 @@ async function testModel(modelId: string): Promise<TestResult> {
   }
 }
 
-// ============================================================================
 // REPORTING: Output results
-// ============================================================================
 
 function resultToEmoji(result: TestResult): string {
   switch (result.status) {
@@ -151,9 +138,7 @@ function resultToDescription(result: TestResult): string {
   }
 }
 
-// ============================================================================
 // MAIN
-// ============================================================================
 
 (async () => {
   console.log("\n" + "=".repeat(80));

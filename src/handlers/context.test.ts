@@ -1,13 +1,8 @@
-/**
- * Unit tests for tool call parsing in context handler
- */
+
 
 import { describe, it, expect, beforeEach } from "vitest";
 import { getModelClass } from "../models";
 
-/**
- * Copy of the parsing logic from context.ts for isolated testing
- */
 function parseToolCallsFromText(
     text: string,
 ): Array<{ id: string; name: string; arguments: Record<string, any> }> | null {

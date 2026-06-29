@@ -1,8 +1,4 @@
 #!/usr/bin/env npx tsx
-/**
- * Tool Use Benchmark for Featherless models.
- * Loads models from src/models.ts
- */
 
 import { readFileSync } from "node:fs";
 import OpenAI from "openai";
@@ -28,15 +24,11 @@ const client = new OpenAI({
   baseURL: "https://api.featherless.ai/v1",
 });
 
-// ── ANSI ────────────────────────────────────────────────────────────────────
-
 const DIM = "\x1b[2m";
 const BOLD = "\x1b[1m";
 const RESET = "\x1b[0m";
 const BG_GREEN = "\x1b[42m\x1b[30m";
 const BG_RED = "\x1b[41m\x1b[37m";
-
-// ── Bench model list ────────────────────────────────────────────────────────
 
 interface BenchModel {
   id: string;
@@ -49,8 +41,6 @@ interface BenchModel {
 const BENCH_MODELS: BenchModel[] = [
   { id: "zai-org/GLM-4.7-Flash", short: "GLM-4.7-Flash", cc: 2, family: "glm" },
 ];
-
-// ── Tools ───────────────────────────────────────────────────────────────────
 
 const bashTool = {
   type: "function" as const,
@@ -113,11 +103,7 @@ const calculatorTool = {
   },
 };
 
-// ── System prompt for tool use ────────────────────────────────────────────
-
 const TOOL_USE_SYSTEM_PROMPT = `You are a helpful assistant. Use tools when asked. Be concise.`;
-
-// ── Scenarios ────────────────────────────────────────────────────────────────
 
 interface Scenario {
   name: string;
@@ -200,8 +186,6 @@ const scenarios: Scenario[] = [
   },
 ];
 
-// ── QRWKV tool call parser ──────────────────────────────────────────────────
-
 function parseToolCallsFromText(text: string): Array<{ name: string; arguments: Record<string, unknown> }> {
   const results: Array<{ name: string; arguments: Record<string, unknown> }> = [];
 
@@ -235,8 +219,6 @@ function parseToolCallsFromText(text: string): Array<{ name: string; arguments: 
 
   return results;
 }
-
-// ── Runner ─────────────────────────────────────────────────────────────────
 
 interface Result {
   modelId: string;
@@ -332,8 +314,6 @@ async function runOne(model: BenchModel, scenario: Scenario): Promise<Result> {
     return { modelId: model.id, modelShort: model.short, scenario: scenario.name, pass: false, error: msg, timeMs: elapsed, family: model.family, toolCallFormat: "none" };
   }
 }
-
-// ── Main ───────────────────────────────────────────────────────────────────
 
 function sleep(ms: number) { return new Promise((r) => setTimeout(r, ms)); }
 

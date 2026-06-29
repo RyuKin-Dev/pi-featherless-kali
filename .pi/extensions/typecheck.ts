@@ -1,8 +1,4 @@
-/**
- * Typecheck Extension
- *
- * Provides a /typecheck command to run TypeScript type checking on the project.
- */
+
 
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { spawn } from "node:child_process";

@@ -1,8 +1,4 @@
 #!/usr/bin/env npx tsx
-/**
- * Terminal-Bench Runner for Pi VariantAgent
- * Runs Harbor benchmarks against the Featherless API
- */
 
 import { execSync, spawn } from 'child_process';
 import * as fs from 'fs';

@@ -16,13 +16,6 @@ const MODELS_NEED_TOOL_CALL_PARSING = new Set([
     "qwen3-32b",
 ]);
 
-/**
- * Parse tool calls from text content for models that return function calls
- * in XML format instead of proper tool_calls API responses.
- * Formats:
- * - <function>{"name": "ls", "arguments": {"path": "/tmp"}}</function>
- * - <tool_call>{"name": "ls", "arguments": {...}}</tool_call>
- */
 function parseToolCallsFromText(
     text: string,
 ): Array<{ id: string; name: string; arguments: Record<string, any> }> | null {
@@ -94,10 +87,6 @@ async function countTokens(
     }
 }
 
-/**
- * Unified function to update character counts, recount tokens if necessary,
- * and trigger proactive compaction if context usage exceeds threshold.
- */
 async function syncAndCheckCompaction(
     pi: ExtensionAPI,
     ctx: ExtensionContext,

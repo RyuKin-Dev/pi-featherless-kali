@@ -1,6 +1,6 @@
 # pi-featherless — Kali Linux Rebuild
 
-This is a rebuilt, Kali Linux-compatible copy of the upstream `CodeDoes/pi-featherless` provider extension for the `pi` coding agent.
+> **Attribution:** This is a rebuilt, Kali Linux-compatible copy of the original [`CodeDoes/pi-featherless`](https://github.com/CodeDoes/pi-featherless) project. The original code, structure, and model registry were created by **CodeDoes** / **KitAstro** (AstralCosmo). This repository only fixes the upstream syntax error, restores the build, and adds a Kali install path.
 
 ## What was changed compared to upstream?
 

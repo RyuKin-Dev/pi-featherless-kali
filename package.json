@@ -1,0 +1,54 @@
+{
+    "name": "@codedoes/pi-featherless",
+    "version": "1.0.0",
+    "description": "Featherless Provider for Pi with accurate tokenization and concurrency tracking.",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:ui": "vitest --ui",
+        "bench": "npx tsx bench/run-terminal-bench.ts",
+        "bench:fast": "npx tsx bench/run-terminal-bench.ts --fast",
+        "bench:quick": "npx tsx bench/run-terminal-bench.ts --quick",
+        "bench:full": "npx tsx bench/run-terminal-bench.ts"
+    },
+    "keywords": [
+        "pi",
+        "pi-package",
+        "coding-agent",
+        "extension",
+        "provider",
+        "featherless",
+        "llm"
+    ],
+    "author": "",
+    "license": "ISC",
+    "packageManager": "pnpm@10.33.0",
+    "peerDependencies": {
+        "@mariozechner/pi-ai": "*",
+        "@mariozechner/pi-coding-agent": "*",
+        "@sinclair/typebox": "*"
+    },
+    "pi": {
+        "extensions": [
+            "extensions/**/*.ts"
+        ],
+        "skills": [
+            "skills/**/SKILL.md"
+        ]
+    },
+    "dependencies": {
+        "@mariozechner/pi-tui": "^0.65.0",
+        "JSONStream": "^1.3.5",
+        "openai": "^6.33.0",
+        "puppeteer": "^24.40.0"
+    },
+    "devDependencies": {
+        "@vitest/ui": "^4.1.3",
+        "dotenv": "^17.4.1",
+        "tsx": "^4.19.0",
+        "typescript": "^5.8.0",
+        "vitest": "^4.1.3"
+    }
+}

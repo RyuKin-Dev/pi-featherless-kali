@@ -102,7 +102,5 @@ pnpm exec tsx test-api.ts ping
 - `ERR_PNPM_FETCH_404 @codedoes/pi-featherless` → Use this rebuilt copy (self-dependency removed)
 - TypeScript missing → `pnpm install` (typescript/tsx are devDependencies)
 
----
-
 **Original project:** [CodeDoes/pi-featherless](https://github.com/CodeDoes/pi-featherless)  
 **Rebuild author:** Alessandro / RyuKin-Dev

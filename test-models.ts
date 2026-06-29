@@ -16,8 +16,6 @@ const client = new OpenAI({
   baseURL: 'https://api.featherless.ai/v1',
 });
 
-// DATA: Model list (easy to add/remove models)
-
 interface ModelConfig {
   id: string;
   short: string;
@@ -53,8 +51,6 @@ const TOOLS = [{
   },
 }];
 
-// LOGIC: Model testing
-
 type TestResult =
   | { status: "native"; tool_count: number }
   | { status: "xml"; format: string }
@@ -64,7 +60,6 @@ type TestResult =
   | { status: "error"; reason: string };
 
 async function testModel(modelId: string): Promise<TestResult> {
-  // 1. Connectivity test
   try {
     await client.chat.completions.create({
       model: modelId,
@@ -81,7 +76,6 @@ async function testModel(modelId: string): Promise<TestResult> {
     return { status: "error", reason: e.message?.slice(0, 80) ?? "unknown error" };
   }
 
-  // 2. Tool calling test
   try {
     const res = await client.chat.completions.create({
       model: modelId,
@@ -100,7 +94,6 @@ async function testModel(modelId: string): Promise<TestResult> {
 
     const content = msg.content || "";
     if (content.includes("<function>") || content.includes("")) {
-      // Extract which format was found
       const format = content.includes("<function>") ? "<function>" : "";
       return { status: "xml", format };
     }
@@ -113,8 +106,6 @@ async function testModel(modelId: string): Promise<TestResult> {
     return { status: "error", reason: e.message?.slice(0, 80) ?? "unknown error" };
   }
 }
-
-// REPORTING: Output results
 
 function resultToEmoji(result: TestResult): string {
   switch (result.status) {
@@ -138,8 +129,6 @@ function resultToDescription(result: TestResult): string {
   }
 }
 
-// MAIN
-
 (async () => {
   console.log("\n" + "=".repeat(80));
   console.log(" TOOL CALLING MODEL EVALUATOR");
@@ -154,7 +143,6 @@ function resultToDescription(result: TestResult): string {
     console.log(`${resultToEmoji(result)} ${resultToDescription(result)}`);
   }
 
-  // Summary
   console.log("\n" + "-".repeat(80));
   console.log(" SUMMARY");
   console.log("-".repeat(80));

@@ -4,7 +4,6 @@ import { readFileSync } from "node:fs";
 import OpenAI from "openai";
 import { MODELS, getConcurrencyCost, getModelClass } from "./src/models.ts";
 
-// Load .env if present
 try {
   const env = readFileSync(".env", "utf-8");
   for (const line of env.split("\n")) {
@@ -37,7 +36,6 @@ interface BenchModel {
   family: string;
 }
 
-// Best models
 const BENCH_MODELS: BenchModel[] = [
   { id: "zai-org/GLM-4.7-Flash", short: "GLM-4.7-Flash", cc: 2, family: "glm" },
 ];
@@ -189,7 +187,6 @@ const scenarios: Scenario[] = [
 function parseToolCallsFromText(text: string): Array<{ name: string; arguments: Record<string, unknown> }> {
   const results: Array<{ name: string; arguments: Record<string, unknown> }> = [];
 
-  // Format 1: <tool_call>{"name": "...", "arguments": {...}}</tool_call>
   const regex1 = /<tool_call>\s*(\{.*?\})\s*<\/tool_call>/gs;
   for (const match of text.matchAll(regex1)) {
     try {
@@ -203,7 +200,6 @@ function parseToolCallsFromText(text: string): Array<{ name: string; arguments: 
     } catch { /* skip */ }
   }
 
-  // Format 2: <function>{"name": "...", "arguments": {...}}</function> (legacy)
   const regex2 = /<function>\s*(\{.*?\})\s*<\/function>/gs;
   for (const match of text.matchAll(regex2)) {
     try {
@@ -255,7 +251,6 @@ async function runOne(model: BenchModel, scenario: Scenario): Promise<Result> {
     let gotNativeToolCalls = false;
     const nativeToolCalls: Array<{ name: string; args: string }> = [];
 
-    // @ts-ignore
     for await (const chunk of stream) {
       const choice = chunk.choices?.[0];
       if (!choice?.delta) continue;
@@ -332,7 +327,6 @@ async function main() {
     }
   }
 
-  // Scoreboard
   console.log(`\n\n${BOLD}  ═══════════════════════════════════════${RESET}`);
   console.log(`${BOLD}  SCOREBOARD${RESET}`);
   console.log(`  ═══════════════════════════════════════\n`);
@@ -355,7 +349,6 @@ async function main() {
     console.log(`  ${results[0].modelShort.padEnd(30)} ${String(pass).padStart(2)}/${total}   ${rate.toFixed(0).padStart(3)}%  ${(avgMs / 1000).toFixed(1)}s`);
   }
 
-  // By scenario
   console.log(`\n${BOLD}  BY SCENARIO${RESET}`);
   for (const scenario of scenarios) {
     const results = allResults.filter((r) => r.scenario === scenario.name);

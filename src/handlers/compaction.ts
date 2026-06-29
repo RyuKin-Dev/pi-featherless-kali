@@ -29,10 +29,8 @@ export function registerCompaction(pi: ExtensionAPI) {
             previousSummary,
         } = preparation;
 
-        // Convert messages to LLM format
         const llmMessages = convertToLlm([...messagesToSummarize, ...turnPrefixMessages]);
         
-        // Build the summarization request
         const messages: Context["messages"] = [
             ...llmMessages,
             {
@@ -43,7 +41,6 @@ export function registerCompaction(pi: ExtensionAPI) {
         ];
 
         try {
-            // Ask the current model to summarize (it already knows the context)
             const result = await completeSimple(
                 model,
                 { messages },
@@ -57,14 +54,12 @@ export function registerCompaction(pi: ExtensionAPI) {
 
             if (!summaryText.trim()) return;
 
-            // Prepend previous summary if exists
             const summary = previousSummary
                 ? `## Previous Context\n${previousSummary}\n\n## Recent Activity\n${summaryText}`
                 : summaryText;
 
             return { compaction: { summary, firstKeptEntryId, tokensBefore } };
         } catch {
-            // Fall back to default compaction on error
             return;
         }
     });

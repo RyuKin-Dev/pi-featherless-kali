@@ -248,8 +248,6 @@ export function getModelClass(modelId: string): string | undefined {
     const entry = MODELS.find((m) => m.id === modelId);
     if (entry) return entry.model_class;
 
-    // Fallback for models that are not in the static snapshot but still need
-    // class-specific handling (e.g. tool-call parsing).
     const lower = modelId.toLowerCase();
     if (lower.includes("qrwkv-72b") || lower.includes("qrwkv7b-72b")) {
         return "qrwkv-72b-32k";

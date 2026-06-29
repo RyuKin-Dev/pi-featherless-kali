@@ -4,33 +4,26 @@ import { execSync, spawn } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Configuration
 const CONFIG = {
-    // API key from .env or environment
     apiKey: process.env.FEATHERLESS_API_KEY || '',
     
-    // Benchmark settings
     dataset: 'terminal-bench@2.0',
     agentModule: 'pi_terminal_bench:VariantAgent',
     
-    // Fast mode defaults
     fastMode: {
         maxTasks: 10,
         concurrency: 3,
         retries: 0,
     },
     
-    // Full mode defaults  
     fullMode: {
         concurrency: 4,
         retries: 1,
     },
     
-    // Output directory
     jobsDir: './variant-results',
 };
 
-// Parse CLI args
 const args = process.argv.slice(2);
 const isFast = args.includes('--fast') || args.includes('-f');
 const isQuick = args.includes('--quick') || args.includes('-q');
@@ -39,12 +32,10 @@ const model = modelArg || 'featherless-ai/Qwen2.5-Coder-32B-Instruct';
 const taskLimit = args.find(a => a.startsWith('--tasks='))?.split('=')[1];
 const taskFilter = args.find(a => a.startsWith('--filter='))?.split('=')[1];
 
-// Quick mode: just 3 tasks, no verification
 const maxTasks = isQuick ? 3 : (isFast ? CONFIG.fastMode.maxTasks : (taskLimit ? parseInt(taskLimit) : undefined));
 const concurrency = isQuick ? 1 : (isFast ? CONFIG.fastMode.concurrency : CONFIG.fullMode.concurrency);
 const retries = isQuick ? 0 : (isFast ? CONFIG.fastMode.retries : CONFIG.fullMode.retries);
 
-// Load .env if API key not set
 if (!CONFIG.apiKey) {
     const envPath = path.join(process.cwd(), '.env');
     if (fs.existsSync(envPath)) {
@@ -61,7 +52,6 @@ if (!CONFIG.apiKey) {
     process.exit(1);
 }
 
-// Generate job name
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const modeLabel = isQuick ? 'quick' : (isFast ? 'fast' : 'full');
 const jobName = `variant-${modeLabel}-${timestamp}`;
@@ -79,7 +69,6 @@ console.log(`   Retries: ${retries}`);
 console.log(`   Job: ${jobName}`);
 console.log('');
 
-// Build harbor command
 const jobsDir = path.join(process.cwd(), CONFIG.jobsDir);
 const benchmarkSuiteDir = path.join(process.cwd(), 'benchmark-suite');
 
@@ -104,13 +93,11 @@ if (taskFilter) {
 }
 
 if (isQuick) {
-    // Skip verification for quickest runs
     harborArgs.push('--disable-verification');
 }
 
 console.log('🚀 Starting benchmark...\n');
 
-// Set environment and run
 const env = {
     ...process.env,
     FEATHERLESS_API_KEY: CONFIG.apiKey,
@@ -118,7 +105,6 @@ const env = {
 };
 
 try {
-    // Run harbor from benchmark-suite directory
     const result = spawn('harbor', harborArgs, {
         cwd: benchmarkSuiteDir,
         env,

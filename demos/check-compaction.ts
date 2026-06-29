@@ -138,7 +138,6 @@ async function main() {
 
     const startTime = Date.now();
 
-    // 1. Strip
     console.log("1. Stripping verbose content...");
     const filtered = stripToMetadata(convertToLlm(messages));
     const stripTime = Date.now();
@@ -147,7 +146,6 @@ async function main() {
     const totalChars = JSON.stringify(filtered).length;
     console.log(`Estimated Filtered Size: ${Math.round(totalChars / 1024)} KB`);
 
-    // 2. Parallel Summarize
     console.log("2. Parallel summarizing (2 chunks)...");
     const chunkSize = Math.ceil(filtered.length / 2);
     const chunks = [];
@@ -183,7 +181,6 @@ async function main() {
         .join("\n\n");
     const parallelTime = Date.now();
 
-    // 3. Final Merge
     console.log("3. Merging summaries...");
     const mergeCtx: Context = {
         messages: [

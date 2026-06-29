@@ -23,7 +23,6 @@ function parseToolCallsFromText(
                 });
             }
         } catch {
-            // Skip invalid JSON
         }
     }
 
@@ -128,12 +127,10 @@ describe("message_end handler logic simulation", () => {
             },
         };
 
-        // Simulate message_end handler logic
         const MODELS_NEED_TOOL_CALL_PARSING = new Set(["qrwkv-72b-32k", "qrwkv-32b-32k"]);
         const modelClass = "qrwkv-72b-32k";
         
         if (!MODELS_NEED_TOOL_CALL_PARSING.has(modelClass)) {
-            // Skip - model doesn't need parsing
         }
 
         const hasToolCalls = event.message.content?.some(
@@ -167,7 +164,6 @@ describe("message_end handler logic simulation", () => {
             event.message.stopReason = "toolUse";
         }
 
-        // Verify
         expect(event.message.content).toHaveLength(1);
         const toolBlock = event.message.content[0] as any;
         expect(toolBlock.type).toBe("toolCall");
@@ -218,7 +214,6 @@ describe("message_end handler logic simulation", () => {
             event.message.stopReason = "toolUse";
         }
 
-        // Should have: text + toolCall + text
         expect(event.message.content).toHaveLength(3);
         expect(event.message.content[0].type).toBe("text");
         expect(event.message.content[0].text).toBe("Hello, I can help you!");
@@ -243,9 +238,7 @@ describe("message_end handler logic simulation", () => {
             (block: any) => block.type === "toolCall"
         );
 
-        // Early return if already has tool calls
         if (hasToolCalls) {
-            // Should not modify
         }
 
         expect(event.message.content).toHaveLength(2);

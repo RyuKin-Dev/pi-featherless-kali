@@ -179,7 +179,6 @@ async function runStrategy(modelId: string, messages: any[]) {
 
     console.log(`  > Testing ${modelId} with ${numChunks} chunks...`);
 
-    // Parallel Summaries
     const p1 = Date.now();
     const subPromises = chunks.map((chunk, idx) => {
         const text = serializeConversation(chunk);
@@ -211,7 +210,6 @@ async function runStrategy(modelId: string, messages: any[]) {
     const subResults = await Promise.all(subPromises);
     const p2 = Date.now();
 
-    // Join summaries directly
     const finalText = subResults
         .map((r: any, i) => {
             const text =

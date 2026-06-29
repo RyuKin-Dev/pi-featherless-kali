@@ -14,8 +14,6 @@ if (!API_KEY) {
 
 const client = new OpenAI({ apiKey: API_KEY, baseURL: 'https://api.featherless.ai/v1' });
 
-// CONFIGURATION
-
 type ModelParams = {
   temperature?: number;
   top_p?: number;
@@ -147,8 +145,6 @@ const TOOLS = [
   },
 ];
 
-// LOGIC
-
 interface ScenarioResult {
   scenario: ScenarioKey;
   passed: boolean;
@@ -173,9 +169,7 @@ interface ModelResult {
 }
 
 function parseModelInput(input: string): ModelEntry {
-  // Strip URL prefix if present
   const id = input.replace(/^https?:\/\/featherless\.ai\/models\//, '');
-  // Extract short label
   const label = id.split('/').pop()?.replace(/-/g, ' ');
   return { id, label: label || id };
 }
@@ -240,16 +234,12 @@ async function evaluateModel(entry: ModelEntry, scenarioFilter?: ScenarioKey[]):
   };
 }
 
-// INPUT HANDLING
-
 function loadConfigFromArgs(): EvaluationConfig | null {
   const args = process.argv.slice(2);
   if (args.length === 0) return null;
 
-  // Remove any option flags (starting with --)
   const cleanArgs = args.filter(a => !a.startsWith('--'));
 
-  // Check for config file via --config FILE or --config=FILE
   const configFlagIdx = args.findIndex(a => a === '--config' || a === '--file');
   if (configFlagIdx >= 0) {
     const file = args[configFlagIdx + 1];
@@ -258,7 +248,6 @@ function loadConfigFromArgs(): EvaluationConfig | null {
       process.exit(1);
     }
     const config = JSON.parse(readFileSync(file, 'utf-8'));
-    // Append any additional positional args as models
     if (cleanArgs.length > 0) {
       config.models = config.models || [];
       config.models.push(...cleanArgs.map(parseModelInput));
@@ -275,15 +264,12 @@ function loadConfigFromArgs(): EvaluationConfig | null {
     return JSON.parse(readFileSync(configEqual, 'utf-8'));
   }
 
-  // Default: all non-flag args are model IDs
   if (cleanArgs.length === 0) {
     console.error('No models specified.');
     process.exit(1);
   }
   return { models: cleanArgs.map(parseModelInput) };
 }
-
-// OUTPUT
 
 function generateMarkdownReport(results: ModelResult[]): string {
   let md = `# Tool Calling Evaluation Report\n\n`;
@@ -348,8 +334,6 @@ function saveResults(results: ModelResult[], config: EvaluationConfig) {
   console.log(`   JSON: ${jsonPath}`);
   console.log(`   Markdown: ${mdPath}`);
 }
-
-// MAIN
 
 (async () => {
   console.log("\n" + "=".repeat(80));

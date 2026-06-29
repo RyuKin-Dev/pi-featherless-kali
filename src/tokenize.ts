@@ -17,14 +17,12 @@ export async function tokenize(
     text: string,
     apiKey?: string,
 ): Promise<number> {
-    // Check cache first
     const key = cacheKey(model, text);
     const cached = tokenCache.get(key);
     if (cached !== undefined) {
         return cached;
     }
 
-    // Make API request
     const response = await fetch(TOKENIZE_URL, {
         method: "POST",
         headers: {
@@ -35,7 +33,6 @@ export async function tokenize(
     });
 
     if (!response.ok) {
-        // Fall back to estimation on error
         const body = await response.text().catch(() => "unknown");
         console.warn(
             `Tokenize API error: ${response.status} ${response.statusText}`,
@@ -49,12 +46,9 @@ export async function tokenize(
         tokens?: number[];
     };
 
-    // API returns either {count: number} or {tokens: number[]}
     const count = data.count ?? data.tokens?.length ?? 0;
 
-    // Cache the result (with LRU eviction)
     if (tokenCache.size >= MAX_CACHE_SIZE) {
-        // Delete oldest entries (first 10%)
         const keysToDelete = Array.from(tokenCache.keys()).slice(
             0,
             Math.floor(MAX_CACHE_SIZE * 0.1),
@@ -73,7 +67,6 @@ export async function tokenizeBatch(
     texts: string[],
     apiKey?: string,
 ): Promise<number[]> {
-    // Check cache for each text
     const results: number[] = new Array(texts.length);
     const uncached: { index: number; text: string }[] = [];
 
@@ -87,18 +80,15 @@ export async function tokenizeBatch(
         }
     }
 
-    // If all cached, return early
     if (uncached.length === 0) {
         return results;
     }
 
-    // Fetch uncached texts in parallel
     await Promise.all(
         uncached.map(async ({ index, text }) => {
             try {
                 results[index] = await tokenize(model, text, apiKey);
             } catch {
-                // Fall back to estimation
                 results[index] = estimateTokens(text);
             }
         }),
@@ -114,14 +104,10 @@ export function estimateTokens(
     const chars = text.length;
     if (chars === 0) return 0;
 
-    // Detect bash output by looking for file permission patterns
-    // Lines like: "drwxr-xr-x  2 kit kit  4096 Apr  5 10:23 ."
-    // or: "-rw-r--r--  1 kit kit 12345 Apr  5 10:22 index.ts"
     const lines = text.split("\n");
     const permissionPattern = /^[d-][rwx-]{9}\s/;
     const matchingLines = lines.filter((line) => permissionPattern.test(line));
 
-    // If more than half the lines look like file listings, treat as bash output
     if (
         matchingLines.length > 0 &&
         matchingLines.length >= lines.length * 0.5

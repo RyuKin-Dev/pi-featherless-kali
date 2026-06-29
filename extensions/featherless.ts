@@ -1,6 +1,6 @@
 
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { registerProvider } from "../src/handlers/provider";
 import { registerConcurrencyTracking } from "../src/handlers/concurrency";
 import { registerContextTracking } from "../src/handlers/context";

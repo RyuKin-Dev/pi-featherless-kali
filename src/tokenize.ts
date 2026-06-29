@@ -1,6 +1,6 @@
 
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 const TOKENIZE_URL = "https://api.featherless.ai/v1/tokenize";
 

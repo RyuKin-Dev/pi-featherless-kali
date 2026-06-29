@@ -1,7 +1,7 @@
-import type { Context } from "@mariozechner/pi-ai";
-import { completeSimple } from "@mariozechner/pi-ai";
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
-import { convertToLlm } from "@mariozechner/pi-coding-agent";
+import type { Context } from "@earendil-works/pi-ai";
+import { completeSimple } from "@earendil-works/pi-ai/compat";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { convertToLlm } from "@earendil-works/pi-coding-agent";
 import { PROVIDER, getApiKey } from "./shared";
 
 const SUMMARY_PROMPT = `Summarize the conversation so far. Focus on:

@@ -2,7 +2,7 @@ import {
     buildSessionContext,
     type ExtensionAPI,
     type ExtensionContext,
-} from "@mariozechner/pi-coding-agent";
+} from "@earendil-works/pi-coding-agent";
 import { getRealContextLimit, getModelClass } from "../models";
 import { tokenizeBatch, extractText, clearTokenCache } from "../tokenize";
 import { PROVIDER, getApiKey } from "./shared";

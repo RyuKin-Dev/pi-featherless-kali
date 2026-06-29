@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INSTALL_DIR="${HOME}/.pi/agent/extensions/pi-featherless"
+PI_AGENT_DIR="${HOME}/.pi/agent"
+SKILLS_DIR="${PI_AGENT_DIR}/skills"
+INSTALL_DIR="${PI_AGENT_DIR}/extensions/pi-featherless"
 SKIP_TESTS=0
 FORCE=0
 
@@ -44,8 +46,34 @@ if [ "${FORCE}" -eq 1 ]; then
 fi
 
 git -C "${INSTALL_DIR}" pull
-
 pnpm -C "${INSTALL_DIR}" install
+
+install_skill_deps() {
+    local skill_path="${1}"
+    if [ -f "${skill_path}/package.json" ]; then
+        echo "    Installing skill dependencies: ${skill_path}"
+        (
+            cd "${skill_path}"
+            if command -v npm >/dev/null 2>&1; then
+                npm install
+            else
+                echo "WARNING: npm not found; skipping ${skill_path} dependency install." >&2
+            fi
+        )
+    fi
+}
+
+if [ -d "${INSTALL_DIR}/skills" ]; then
+    mkdir -p "${SKILLS_DIR}"
+    for skill in "${INSTALL_DIR}/skills"/*; do
+        [ -d "${skill}" ] || continue
+        name="$(basename "${skill}")"
+        echo "    Linking skill: ${name}"
+        rm -rf "${SKILLS_DIR}/${name}"
+        ln -sfn "${skill}" "${SKILLS_DIR}/${name}"
+        install_skill_deps "${skill}"
+    done
+fi
 
 if [ "${SKIP_TESTS}" -eq 0 ]; then
     echo "==> Running tests and type check..."
@@ -57,3 +85,5 @@ fi
 
 echo ""
 echo "==> Update complete: ${INSTALL_DIR}"
+echo "==> Skills linked under: ${SKILLS_DIR}"
+echo "==> Restart the Chat UI to pick up any changes."

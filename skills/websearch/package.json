@@ -1,0 +1,16 @@
+{
+  "name": "pi-websearch-skill",
+  "version": "1.0.0",
+  "description": "Web search and content extraction skill for pi",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "search": "node search.js",
+    "extract": "node extract.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "jsdom": "^24.1.0",
+    "@mozilla/readability": "^0.5.0"
+  }
+}

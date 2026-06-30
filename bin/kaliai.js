@@ -12,7 +12,7 @@ const AGENT_DIR = join(HOME, ".pi", "agent");
 const EXT_DIR = join(AGENT_DIR, "extensions", "pi-featherless");
 const SKILLS_DIR = join(AGENT_DIR, "skills");
 const PI_PACKAGE = "@earendil-works/pi-coding-agent";
-const NPM_PACKAGE = "@earendil-works/pi-featherless-kali";
+const NPM_PACKAGE = "@ryukin-dev/pi-featherless-kali";
 
 function print(...args) {
     console.log(...args);

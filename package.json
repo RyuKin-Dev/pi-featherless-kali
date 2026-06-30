@@ -1,5 +1,5 @@
 {
-    "name": "@earendil-works/pi-featherless-kali",
+    "name": "@ryukin-dev/pi-featherless-kali",
     "version": "1.1.0",
     "description": "Featherless Provider for Pi with accurate tokenization and concurrency tracking.",
     "type": "module",

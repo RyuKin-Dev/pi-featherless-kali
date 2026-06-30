@@ -33,7 +33,7 @@ All functional source logic is preserved 1:1 from the original repository; only 
 
 ```bash
 npm install -g @earendil-works/pi-coding-agent
-npm install -g @earendil-works/pi-featherless-kali
+npm install -g @ryukin-dev/pi-featherless-kali
 ```
 
 Danach reicht im Terminal:
@@ -51,6 +51,8 @@ kaliai              # Chat UI starten
 kaliai Update       # KaliAI aktualisieren
 kaliai whatsnew     # Neueste Änderungen anzeigen
 ```
+
+> Der Scope ist `@ryukin-dev`, weil `@earendil-works` eine fremde npm-Organisation ist.
 
 ## Install aus dem Source-Repo
 

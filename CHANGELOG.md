@@ -2,7 +2,7 @@
 
 ## 1.1.0
 
-- Package auf npm unter `@earendil-works/pi-featherless-kali` veröffentlicht.
+- Package auf npm unter `@ryukin-dev/pi-featherless-kali` veröffentlicht.
 - KaliAI CLI-Binary `kali-ai` hinzugefügt:
   - Menu statt direktem `pi` Start.
   - `kali-ai chat` startet die Chat UI.

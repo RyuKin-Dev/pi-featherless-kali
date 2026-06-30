@@ -1,11 +1,27 @@
 {
     "name": "@earendil-works/pi-featherless-kali",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Featherless Provider for Pi with accurate tokenization and concurrency tracking.",
     "type": "module",
     "main": "index.js",
+    "bin": {
+        "kaliai": "bin/kaliai.js",
+        "KaliAi": "bin/kaliai.js"
+    },
+    "files": [
+        "extensions/",
+        "src/",
+        "skills/",
+        "bin/",
+        "CHANGELOG.md",
+        "README.md"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "test": "vitest run",
+        "publish-package": "pnpm publish --access public --no-git-checks",
         "test:watch": "vitest",
         "test:ui": "vitest --ui",
         "bench": "npx tsx bench/run-terminal-bench.ts",

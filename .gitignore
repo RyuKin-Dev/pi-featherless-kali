@@ -14,6 +14,10 @@ logs/
 .env
 .env.local
 
+# npm publish auth token — never commit
+.npmrc
+*.tgz
+
 # OS files
 .DS_Store
 Thumbs.db

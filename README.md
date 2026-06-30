@@ -10,14 +10,16 @@
 | `src/models.ts` `getModelClass()` | Only exact-id lookup | Falls back to known class patterns so removed-but-still-referenced models behave correctly |
 | `package.json` | Self-dependency `@codedoes/pi-featherless`: `"."` | Removed — avoids pnpm registry 404 |
 | Package scope | `@mariozechner/pi-*` | Switched to `@earendil-works/pi-ai` / `@earendil-works/pi-coding-agent` |
+| Distribution | Nur Source-Clone | npm-Paket `@earendil-works/pi-featherless-kali` mit `kali-ai` CLI |
 | `src/handlers/provider.ts` | OAuth-style login | API-key provider using `$FEATHERLESS_API_KEY`; appears under `/login` -> **API keys** |
 | Type-check command | Missing | `pnpm tsc --noEmit` now works |
-| Install script | None | `install-kali.sh` for global or project-local install |
+| Install script | None | `install-kali.sh` for global source install |
 | Update script | None | `update-kali.sh` pulls latest changes, reinstalls, and re-runs tests |
 | Bundled skills | None | `websearch` and `kali-admin` |
+| Update-Banner | None | Automatische "Update verfügbar"-Meldung oben in der Chat UI |
 | Code style | File-level JSDoc and section-divider comments | Removed to avoid AI-typical comment patterns |
 
-All functional source logic is preserved 1:1 from the original repository; only imports, provider registration, build/install metadata, and comments were changed.
+All functional source logic is preserved 1:1 from the original repository; only imports, provider registration, build/install metadata, CLI helpers, and comments were changed.
 
 ## Requirements
 
@@ -25,11 +27,32 @@ All functional source logic is preserved 1:1 from the original repository; only 
 - Node.js ≥ 20 (so `corepack` is available)  
   `sudo apt update && sudo apt install -y nodejs npm`
 - `pnpm` (enabled via corepack)
-- The published Pi Coding Agent:  
-  `npm install -g @earendil-works/pi-coding-agent`
 - A Featherless AI API key: https://featherless.ai/account/api-keys
 
-## Quick install
+## Install via npm
+
+```bash
+npm install -g @earendil-works/pi-coding-agent
+npm install -g @earendil-works/pi-featherless-kali
+```
+
+Danach reicht im Terminal:
+
+```bash
+kaliai
+```
+
+`kaliai` startet die Chat UI. `kaliai Update` aktualisiert das Paket.
+
+### Direktbefehle
+
+```bash
+kaliai              # Chat UI starten
+kaliai Update       # KaliAI aktualisieren
+kaliai whatsnew     # Neueste Änderungen anzeigen
+```
+
+## Install aus dem Source-Repo
 
 ```bash
 chmod +x install-kali.sh
@@ -42,11 +65,7 @@ Project-local install:
 ./install-kali.sh --project /path/to/your/project
 ```
 
-The script also links the bundled `websearch` and `kali-admin` skills into `~/.pi/agent/skills/` and installs the websearch skill dependencies.
-
-## Update an existing install
-
-If you installed via `install-kali.sh`, the target directory is a git clone, so you can update in place:
+## Update eines Source-Installs
 
 ```bash
 chmod +x update-kali.sh
@@ -60,24 +79,6 @@ Project-local update:
 ```
 
 Skip verification with `--skip-tests`; discard local edits with `--force`.
-
-## Manual install
-
-```bash
-npm install -g @earendil-works/pi-coding-agent
-
-mkdir -p ~/.pi/agent/extensions
-cp -a /path/to/pi-featherless-kali ~/.pi/agent/extensions/pi-featherless
-cd ~/.pi/agent/extensions/pi-featherless
-pnpm install
-
-# Link skills
-ln -sfn "$(pwd)/skills/websearch" ~/.pi/agent/skills/websearch
-ln -sfn "$(pwd)/skills/kali-admin" ~/.pi/agent/skills/kali-admin
-(cd skills/websearch && npm install)
-
-export FEATHERLESS_API_KEY="sk-..."
-```
 
 ## Verify
 
@@ -108,12 +109,14 @@ Because the provider is configured as an API-key provider, it appears under **AP
 /logout
 ```
 
-Alternatively, set the key in the environment before starting the agent:
+### KaliAI-Befehle in der Chat UI
 
-```bash
-export FEATHERLESS_API_KEY="sk-..."
-node "$(npm root -g)/@earendil-works/pi-coding-agent/dist/cli.js"
+```text
+/update             # Auf neueste npm-Version aktualisieren
+/whatsnew           # Changelog anzeigen
 ```
+
+Wenn ein Update verfügbar ist, erscheint oben in der Chat UI ein Banner mit der neuen Version. Nach dem Update wird das Changelog kurz eingeblendet, bis das Banner verschwindet.
 
 ## Bundled skills
 

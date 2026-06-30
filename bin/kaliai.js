@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync, execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, rmSync, symlinkSync, cpSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync, readdirSync, readlinkSync, readFileSync } from "node:fs";
 import { homedir, platform } from "node:os";
 import { dirname, join, basename } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,8 +9,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SOURCE_DIR = join(__dirname, "..");
 const HOME = homedir();
 const AGENT_DIR = join(HOME, ".pi", "agent");
-const EXT_DIR = join(AGENT_DIR, "extensions", "pi-featherless");
-const SKILLS_DIR = join(AGENT_DIR, "skills");
 const PI_PACKAGE = "@earendil-works/pi-coding-agent";
 const NPM_PACKAGE = "@ryukin-dev/pi-featherless-kali";
 
@@ -51,6 +49,59 @@ function ensurePiAgentInstalled() {
     return fresh;
 }
 
+function removeLegacyCopy() {
+    const legacyExt = join(AGENT_DIR, "extensions", "pi-featherless");
+    if (existsSync(legacyExt)) {
+        print("==> Entferne alte manuelle Extension...");
+        rmSync(legacyExt, { recursive: true, force: true });
+    }
+
+    const skillsDir = join(AGENT_DIR, "skills");
+    if (!existsSync(skillsDir)) return;
+    for (const entry of readdirSync(skillsDir, { withFileTypes: true })) {
+        if (!entry.isSymbolicLink()) continue;
+        const target = readlinkSync(join(skillsDir, entry.name));
+        if (target.includes("pi-featherless-kali")) {
+            rmSync(join(skillsDir, entry.name), { recursive: true, force: true });
+        }
+    }
+}
+
+function installPiPackage() {
+    print("==> Installiere KaliAI als Pi-Paket...");
+    const piCli = getPiCliPath();
+    const result = spawnSync(process.execPath, [piCli, "install", `npm:${NPM_PACKAGE}`], {
+        stdio: "inherit",
+    });
+    if (result.status !== 0) {
+        print("Fehler: KaliAI Pi-Paket konnte nicht installiert werden.");
+        process.exit(1);
+    }
+}
+
+function getInstalledPiPackageDir() {
+    const scoped = join(AGENT_DIR, "npm", NPM_PACKAGE);
+    if (existsSync(scoped)) return scoped;
+    return undefined;
+}
+
+function installSkillDeps(skillPath) {
+    if (existsSync(join(skillPath, "package.json")) && !existsSync(join(skillPath, "node_modules"))) {
+        print(`  Installiere Skill-Abhängigkeiten: ${basename(skillPath)}`);
+        spawnSync("npm", ["install"], { cwd: skillPath, stdio: "inherit" });
+    }
+}
+
+function installPiPackageSkillDeps() {
+    const pkgDir = getInstalledPiPackageDir();
+    if (!pkgDir) return;
+    const skillsDir = join(pkgDir, "skills");
+    if (!existsSync(skillsDir)) return;
+    for (const name of readdirSync(skillsDir)) {
+        installSkillDeps(join(skillsDir, name));
+    }
+}
+
 function readPackageVersion(dir) {
     try {
         const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
@@ -76,48 +127,11 @@ function readChangelog(dir) {
     }
 }
 
-function installSkillDeps(skillPath) {
-    if (existsSync(join(skillPath, "package.json")) && !existsSync(join(skillPath, "node_modules"))) {
-        print(`  Installiere Skill-Abhängigkeiten: ${basename(skillPath)}`);
-        spawnSync("npm", ["install"], { cwd: skillPath, stdio: "inherit" });
-    }
-}
-
-function linkOrCopy(source, target) {
-    if (existsSync(target)) rmSync(target, { recursive: true, force: true });
-    try {
-        symlinkSync(source, target, platform() === "win32" ? "junction" : "dir");
-    } catch {
-        cpSync(source, target, { recursive: true });
-    }
-}
-
-function installExtension() {
-    print("==> KaliAI Extension wird eingerichtet...");
-    if (existsSync(EXT_DIR)) rmSync(EXT_DIR, { recursive: true, force: true });
-    cpSync(SOURCE_DIR, EXT_DIR, {
-        recursive: true,
-        filter: (src) =>
-            !src.includes("node_modules") &&
-            !src.includes(".git"),
-    });
-
-    const skillsSource = join(SOURCE_DIR, "skills");
-    if (existsSync(skillsSource)) {
-        mkdirSync(SKILLS_DIR, { recursive: true });
-        for (const name of readdirSync(skillsSource)) {
-            const src = join(skillsSource, name);
-            const dst = join(SKILLS_DIR, name);
-            linkOrCopy(src, dst);
-            installSkillDeps(dst);
-        }
-    }
-    print("==> KaliAI Extension bereit.");
-}
-
 async function startChat() {
-    installExtension();
     const piCli = ensurePiAgentInstalled();
+    removeLegacyCopy();
+    installPiPackage();
+    installPiPackageSkillDeps();
     print("==> Starte KaliAI Chat UI...");
     spawnSync(process.execPath, [piCli], { stdio: "inherit" });
 }
@@ -132,7 +146,10 @@ async function runUpdate() {
         print("Update fehlgeschlagen.");
         process.exit(result.status ?? 1);
     }
-    installExtension();
+    const piCli = ensurePiAgentInstalled();
+    removeLegacyCopy();
+    installPiPackage();
+    installPiPackageSkillDeps();
     const after = readPackageVersion(SOURCE_DIR);
     print("==> KaliAI aktualisiert" + (before && after ? `: v${before} -> v${after}` : ""));
     print("");

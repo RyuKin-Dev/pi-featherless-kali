@@ -133,6 +133,8 @@ export interface ModelEntry {
     tool_use?: boolean;
 }
 
+export const DEFAULT_MODEL_ID = "Qwen/Qwen2.5-Coder-7B-Instruct";
+
 export const MODELS: ModelEntry[] = [
     {
         id: "zai-org/GLM-Z1-9B-0414",

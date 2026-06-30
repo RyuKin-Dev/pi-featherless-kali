@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.4
+
+- Das Paket wählt nach dem Speichern des Featherless-API-Keys automatisch ein Standardmodell aus, sodass kein `/model` mehr nötig ist.
+
 ## 1.1.3
 
 - Extension wird jetzt über `pi install npm:@ryukin-dev/pi-featherless-kali` als Pi-Paket geladen.

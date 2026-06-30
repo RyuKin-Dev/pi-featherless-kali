@@ -5,6 +5,7 @@ import { registerConcurrencyTracking } from "../src/handlers/concurrency";
 import { registerContextTracking } from "../src/handlers/context";
 import { registerCompaction } from "../src/handlers/compaction";
 import { registerUpdateCheck } from "../src/handlers/update-check";
+import { registerWebsearchTools } from "../src/tools/websearch";
 import { PROVIDER } from "../src/handlers/shared";
 import { DEFAULT_MODEL_ID } from "../src/models";
 
@@ -38,4 +39,5 @@ export default async function (pi: ExtensionAPI) {
     registerContextTracking(pi);
     registerCompaction(pi);
     registerUpdateCheck(pi);
+    registerWebsearchTools(pi);
 }

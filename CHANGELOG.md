@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.11
+
+- `websearch` und `websearch_extract` jetzt als feste Extension-Tools registriert:
+  - Werden automatisch beim Laden der Featherless-Extension verfügbar.
+  - Benötigen keine separate Skill-Installation mehr.
+  - `websearch` nutzt Brave API mit `BRAVE_API_KEY` oder DuckDuckGo-Fallback.
+  - `websearch_extract` liest Artikel mit Mozilla Readability aus.
+
 ## 1.1.10
 
 - Websearch-Verankerung im System-Prompt für Featherless-Provider:

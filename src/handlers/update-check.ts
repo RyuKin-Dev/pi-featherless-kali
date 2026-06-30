@@ -1,19 +1,11 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname } from "node:path";
-import { fileURLToPath } from "node:url";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 const PACKAGE_JSON = new URL("../../package.json", import.meta.url);
 const CHANGELOG = new URL("../../CHANGELOG.md", import.meta.url);
 const AGENT_DIR = `${homedir()}/.pi/agent`;
 const LAST_UPDATE_FILE = `${AGENT_DIR}/.kali-ai-last-update`;
-
-interface VersionInfo {
-    current: string;
-    latest: string | undefined;
-    outdated: boolean;
-}
 
 function getCurrentVersion(): string {
     const pkg = JSON.parse(readFileSync(PACKAGE_JSON, "utf8"));

@@ -120,6 +120,24 @@ Because the provider is configured as an API-key provider, it appears under **AP
 
 Wenn ein Update verfügbar ist, erscheint oben in der Chat UI ein Banner mit der neuen Version. Nach dem Update wird das Changelog kurz eingeblendet, bis das Banner verschwindet.
 
+## Linux shell helper (`kali-sh`)
+
+A fixed command-line helper for running Linux commands and managing files without relying on skills:
+
+```bash
+kali-sh run "ls -la"
+kali-sh exec uname -a
+kali-sh create /tmp/note.txt "hello world"
+echo "data" | kali-sh write /tmp/data.txt
+kali-sh delete /tmp/old --yes
+kali-sh mkdir /tmp/mydir
+kali-sh cat /etc/os-release
+kali-sh ls /var/log
+kali-sh exists /tmp/note.txt
+```
+
+Mit `--json` gibt jeder Befehl maschinenlesbares JSON aus.
+
 ## Bundled skills
 
 - **websearch** — search the web via Brave (with `BRAVE_API_KEY`) or DuckDuckGo, and extract readable article text from URLs.

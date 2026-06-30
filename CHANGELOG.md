@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.8
+
+- Neuer fester Shell-Helper `kali-sh` hinzugefügt:
+  - `run`, `exec`, `create`, `write`, `delete`, `mkdir`, `cat`, `ls`, `exists`
+  - `--json` Ausgabe für alle Befehle
+  - `--yes`/`--force` für Verzeichnis-Löschungen
+
 ## 1.1.7
 
 - Alle vorherigen Uncensored-Modelle entfernt.

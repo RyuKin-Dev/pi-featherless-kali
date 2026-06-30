@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.1.6
+
+- Alle Modelle auf maximal 36k Tokens Kontext/Output begrenzt.
+- Huihui-Modelle entfernt.
+- Neue Uncensored-Modelle hinzugefügt:
+  - `Dogge/llama-3-70B-instruct-uncensored`
+  - `Guilherme34/Hermes-3-Llama-3.1-70B-Uncensored`
+  - `Kizexc/Phoenix-Llama-3.1-70B-Uncensored`
+  - `AskVenice/venice-uncensored`
+  - `BlossomsAI/Qwen2.5-Coder-14B-Instruct-Uncensored`
+  - `FiditeNemini/Qwen2.5-14B-DeepSeek-R1-1M-Uncensored`
+  - `DavidAU/Gemma-3-27b-it-Uncensored-HERETIC-Gemini-Deep-Reasoning`
+  - `InfinimindCreations/gemma-4-31B-it-uncensored`
+  - `EldritchLabs/MN-12B-Mag-Mell-R1-Uncensored-Scale1.2`
+  - `DavidAU/Qwen3.5-21B-Claude-4.6-Opus-Deckard-Heretic-Uncensored-Thinking`
+  - `GitMylo/Qwen3.5-9B-Uncensored-HauhauCS-Aggressive-safetensors`
+  - `ModelsLab/Llama-3-uncensored-Dare-1`
+  - `ChiKoi7/Llama-3.1-8B-Lexi-Uncensored-V2-Heretic`
+- Thinking/Reasoing-Unterstützung korrigiert:
+  - `moonshotai/Kimi-K2-Thinking` hinzugefügt.
+  - Reasoning-Flag automatisch für Modelle mit `thinking`, `QwQ`, `reason` oder `R1` im Namen.
+  - `QwQ`-Preview explizit als Reasoning markiert.
+
 ## 1.1.5
 
 - Neue Modelle hinzugefügt:

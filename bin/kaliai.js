@@ -32,6 +32,25 @@ function getPiCliPath() {
     return join(root, PI_PACKAGE, "dist", "cli.js");
 }
 
+function ensurePiAgentInstalled() {
+    const piCli = getPiCliPath();
+    if (piCli && existsSync(piCli)) return piCli;
+    print("==> Pi Coding Agent wird installiert...");
+    const result = spawnSync("npm", ["install", "-g", PI_PACKAGE], {
+        stdio: "inherit",
+    });
+    if (result.status !== 0) {
+        print("Fehler: Pi Coding Agent konnte nicht installiert werden.");
+        process.exit(1);
+    }
+    const fresh = getPiCliPath();
+    if (!fresh || !existsSync(fresh)) {
+        print("Fehler: Pi Coding Agent nicht auffindbar nach der Installation.");
+        process.exit(1);
+    }
+    return fresh;
+}
+
 function readPackageVersion(dir) {
     try {
         const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
@@ -98,13 +117,7 @@ function installExtension() {
 
 async function startChat() {
     installExtension();
-    const piCli = getPiCliPath();
-    if (!piCli || !existsSync(piCli)) {
-        print("Fehler: Pi Coding Agent nicht gefunden.");
-        print(`Installiere ihn mit:`);
-        print(`  npm install -g ${PI_PACKAGE}`);
-        process.exit(1);
-    }
+    const piCli = ensurePiAgentInstalled();
     print("==> Starte KaliAI Chat UI...");
     spawnSync(process.execPath, [piCli], { stdio: "inherit" });
 }

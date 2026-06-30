@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.2
+
+- `kaliai` installiert den Pi Coding Agent automatisch, wenn er fehlt.
+- Kein manueller `npm install -g @earendil-works/pi-coding-agent` mehr nötig.
+
 ## 1.1.1
 
 - Unerwünschte Abhängigkeiten (`puppeteer`, `openai`, `JSONStream`) entfernt.

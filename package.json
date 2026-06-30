@@ -1,6 +1,6 @@
 {
     "name": "@ryukin-dev/pi-featherless-kali",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Featherless Provider for Pi with accurate tokenization and concurrency tracking.",
     "type": "module",
     "main": "index.js",
@@ -54,11 +54,7 @@
             "skills/**/SKILL.md"
         ]
     },
-    "dependencies": {
-        "JSONStream": "^1.3.5",
-        "openai": "^6.33.0",
-        "puppeteer": "^24.40.0"
-    },
+    "dependencies": {},
     "devDependencies": {
         "@earendil-works/pi-ai": "^0.80.2",
         "@earendil-works/pi-coding-agent": "^0.80.2",

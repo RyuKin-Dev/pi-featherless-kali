@@ -74,7 +74,7 @@ const MODEL_CLASSES: Record<string, ModelClass> = {
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
     },
     "kimi-k25": {
-        context_limit: 32768,
+        context_limit: 262144,
         concurrency_cost: 4,
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
     },
@@ -88,9 +88,24 @@ const MODEL_CLASSES: Record<string, ModelClass> = {
         concurrency_cost: 4,
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
     },
+    "deepseek4-1.6t": {
+        context_limit: 262144,
+        concurrency_cost: 4,
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+    },
+    "deepseek4-284b": {
+        context_limit: 262144,
+        concurrency_cost: 4,
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+    },
     "mistral-24b-2503": {
         context_limit: 32768,
         concurrency_cost: 2,
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+    },
+    "llama33-70b": {
+        context_limit: 32768,
+        concurrency_cost: 4,
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
     },
     "qwen3-32b": {
@@ -168,6 +183,8 @@ export const MODELS: ModelEntry[] = [
         tool_use: true,
     },
     { id: "moonshotai/Kimi-K2.5", model_class: "kimi-k25", tool_use: true },
+    { id: "moonshotai/Kimi-K2.6", model_class: "kimi-k25", tool_use: true },
+    { id: "moonshotai/Kimi-K2.7-Code", model_class: "kimi-k25", tool_use: true },
     {
         id: "deepseek-ai/DeepSeek-V3.2",
         model_class: "deepseek-v3.2",
@@ -179,8 +196,23 @@ export const MODELS: ModelEntry[] = [
         tool_use: true,
     },
     {
+        id: "deepseek-ai/DeepSeek-V4-Pro",
+        model_class: "deepseek4-1.6t",
+        tool_use: true,
+    },
+    {
+        id: "deepseek-ai/DeepSeek-V4-Flash",
+        model_class: "deepseek4-284b",
+        tool_use: true,
+    },
+    {
         id: "mistralai/Mistral-Small-3.2-24B-Instruct-2506",
         model_class: "mistral-24b-2503",
+        tool_use: true,
+    },
+    {
+        id: "huihui-ai/Llama-3.3-70B-Instruct-abliterated",
+        model_class: "llama33-70b",
         tool_use: true,
     },
     {

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.5
+
+- Neue Modelle hinzugefügt:
+  - `moonshotai/Kimi-K2.6`
+  - `moonshotai/Kimi-K2.7-Code`
+  - `deepseek-ai/DeepSeek-V4-Pro`
+  - `deepseek-ai/DeepSeek-V4-Flash`
+  - `huihui-ai/Llama-3.3-70B-Instruct-abliterated`
+- `kimi-k25` Kontextlimit auf 262k Tokens aktualisiert.
+
 ## 1.1.4
 
 - Das Paket wählt nach dem Speichern des Featherless-API-Keys automatisch ein Standardmodell aus, sodass kein `/model` mehr nötig ist.

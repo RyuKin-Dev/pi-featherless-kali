@@ -275,6 +275,70 @@ describe("message_end handler logic simulation", () => {
     });
 });
 
+function injectWebsearchPrompt(messages: any[]) {
+    const WEBSEARCH_SYSTEM_PROMPT =
+        "Wenn du dir bei Fakten, aktuellen Ereignissen, Software-Versionen, Dateipfaden, Befehlsoptionen oder anderen zeitveränderlichen Informationen nicht sicher bist, rate niemals. Verwende in diesem Fall immer das websearch-Tool, um die benötigten Informationen zu recherchieren, bevor du antwortest.";
+
+    const hasPrompt = messages.some(
+        (m) =>
+            m.role === "system" &&
+            Array.isArray(m.content) &&
+            m.content.some(
+                (c: any) => c.type === "text" && c.text?.includes(WEBSEARCH_SYSTEM_PROMPT),
+            ),
+    );
+    if (hasPrompt) return;
+
+    const existingSystemIndex = messages.findIndex((m) => m.role === "system");
+    if (existingSystemIndex >= 0) {
+        const existing = messages[existingSystemIndex];
+        if (!Array.isArray(existing.content)) {
+            existing.content = [{ type: "text", text: String(existing.content ?? "") }];
+        }
+        const firstText = existing.content.find((c: any) => c.type === "text");
+        if (firstText) {
+            firstText.text = WEBSEARCH_SYSTEM_PROMPT + "\n\n" + firstText.text;
+        } else {
+            existing.content.unshift({ type: "text", text: WEBSEARCH_SYSTEM_PROMPT });
+        }
+    } else {
+        messages.unshift({
+            role: "system",
+            content: [{ type: "text", text: WEBSEARCH_SYSTEM_PROMPT }],
+        });
+    }
+}
+
+describe("injectWebsearchPrompt", () => {
+    it("should add a system message when none exists", () => {
+        const messages: any[] = [{ role: "user", content: [{ type: "text", text: "hi" }] }];
+        injectWebsearchPrompt(messages);
+        expect(messages[0].role).toBe("system");
+        expect(messages[0].content[0].text).toContain("websearch-Tool");
+    });
+
+    it("should prepend to an existing system message", () => {
+        const messages: any[] = [
+            { role: "system", content: [{ type: "text", text: "Existing instruction." }] },
+            { role: "user", content: [{ type: "text", text: "hi" }] },
+        ];
+        injectWebsearchPrompt(messages);
+        expect(messages[0].content[0].text.startsWith("Wenn du dir bei Fakten")).toBe(true);
+        expect(messages[0].content[0].text).toContain("Existing instruction.");
+    });
+
+    it("should not duplicate the prompt", () => {
+        const messages: any[] = [
+            { role: "system", content: [{ type: "text", text: "test" }] },
+        ];
+        injectWebsearchPrompt(messages);
+        injectWebsearchPrompt(messages);
+        const text = messages[0].content[0].text;
+        const matches = text.match(/websearch-Tool/g) ?? [];
+        expect(matches.length).toBe(1);
+    });
+});
+
 describe("getModelClass integration", () => {
     it("should return correct model class for RWKV models", () => {
         expect(getModelClass("featherless-ai/QRWKV-72B")).toBe("qrwkv-72b-32k");

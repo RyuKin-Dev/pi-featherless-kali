@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.10
+
+- Websearch-Verankerung im System-Prompt für Featherless-Provider:
+  - Bei Unsicherheit soll das Modell niemals raten, sondern das `websearch`-Tool nutzen.
+  - Prompt wird automatisch in jede Anfrage injiziert (anhängen an bestehende System-Nachricht oder neue erstellen).
+
 ## 1.1.9
 
 - Fix für Modelle ohne natives Tool-Calling (z. B. `llmfan46/Tower-Plus-72B-ultra-uncensored-heretic`):

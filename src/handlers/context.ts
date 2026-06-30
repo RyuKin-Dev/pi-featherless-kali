@@ -72,6 +72,43 @@ function parseToolCallsFromText(
 const CHAR_CHECK_THRESHOLD = 10000;
 const COMPACTION_THRESHOLD_FACTOR = 0.7;
 
+const WEBSEARCH_SYSTEM_PROMPT =
+    "Wenn du dir bei Fakten, aktuellen Ereignissen, Software-Versionen, Dateipfaden, Befehlsoptionen oder anderen zeitveränderlichen Informationen nicht sicher bist, rate niemals. Verwende in diesem Fall immer das websearch-Tool, um die benötigten Informationen zu recherchieren, bevor du antwortest.";
+
+function hasWebsearchPrompt(messages: any[]): boolean {
+    return messages.some(
+        (m) =>
+            m.role === "system" &&
+            Array.isArray(m.content) &&
+            m.content.some(
+                (c: any) => c.type === "text" && c.text?.includes(WEBSEARCH_SYSTEM_PROMPT),
+            ),
+    );
+}
+
+function injectWebsearchPrompt(messages: any[]) {
+    if (hasWebsearchPrompt(messages)) return;
+
+    const existingSystemIndex = messages.findIndex((m) => m.role === "system");
+    if (existingSystemIndex >= 0) {
+        const existing = messages[existingSystemIndex];
+        if (!Array.isArray(existing.content)) {
+            existing.content = [{ type: "text", text: String(existing.content ?? "") }];
+        }
+        const firstText = existing.content.find((c: any) => c.type === "text");
+        if (firstText) {
+            firstText.text = WEBSEARCH_SYSTEM_PROMPT + "\n\n" + firstText.text;
+        } else {
+            existing.content.unshift({ type: "text", text: WEBSEARCH_SYSTEM_PROMPT });
+        }
+    } else {
+        messages.unshift({
+            role: "system",
+            content: [{ type: "text", text: WEBSEARCH_SYSTEM_PROMPT }],
+        });
+    }
+}
+
 const tracker = new Map<
     string,
     { charsSinceLastCheck: number; lastTokenCount: number }
@@ -162,6 +199,15 @@ export function registerContextTracking(pi: ExtensionAPI) {
     });
 
     pi.on("before_provider_request", async (event, ctx) => {
+        const model = ctx.model;
+        if (model?.provider === PROVIDER) {
+            const payload = event.payload as any;
+            const messages = payload?.messages;
+            if (Array.isArray(messages)) {
+                injectWebsearchPrompt(messages);
+            }
+        }
+
         const messagesOverride = (event.payload as any)?.messages;
         await syncAndCheckCompaction(pi, ctx, { messagesOverride });
     });

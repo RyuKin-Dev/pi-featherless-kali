@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.7
+
+- Alle vorherigen Uncensored-Modelle entfernt.
+- Stattdessen `llmfan46/Tower-Plus-72B-ultra-uncensored-heretic` hinzugefügt:
+  - `model_class`: `qwen2-72b`, 32k Kontext, Tool-Use.
+
 ## 1.1.6
 
 - Alle Modelle auf maximal 36k Tokens Kontext/Output begrenzt.

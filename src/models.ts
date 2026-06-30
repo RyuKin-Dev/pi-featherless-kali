@@ -103,59 +103,9 @@ const MODEL_CLASSES: Record<string, ModelClass> = {
         concurrency_cost: 2,
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
     },
-    "mistral-24b": {
-        context_limit: 32768,
-        concurrency_cost: 2,
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-    },
-    "llama3-8b": {
-        context_limit: 8192,
-        concurrency_cost: 1,
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-    },
-    "llama3-70b": {
-        context_limit: 8192,
-        concurrency_cost: 4,
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-    },
-    "llama31-8b": {
-        context_limit: 32768,
-        concurrency_cost: 1,
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-    },
-    "llama31-70b": {
+    "qwen2-72b": {
         context_limit: 32768,
         concurrency_cost: 4,
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-    },
-    "qwen25-14b": {
-        context_limit: 32768,
-        concurrency_cost: 1,
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-    },
-    "gemma3-27b": {
-        context_limit: 32768,
-        concurrency_cost: 2,
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-    },
-    "gemma4-31b": {
-        context_limit: 32768,
-        concurrency_cost: 2,
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-    },
-    "mistral-nemo": {
-        context_limit: 32768,
-        concurrency_cost: 1,
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-    },
-    "qwen3_5-9b": {
-        context_limit: 32768,
-        concurrency_cost: 1,
-        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-    },
-    "qwen3_5-27b": {
-        context_limit: 32768,
-        concurrency_cost: 2,
         cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
     },
     "qwen3-32b": {
@@ -267,68 +217,8 @@ export const MODELS: ModelEntry[] = [
         tool_use: true,
     },
     {
-        id: "Dogge/llama-3-70B-instruct-uncensored",
-        model_class: "llama3-70b",
-        tool_use: true,
-    },
-    {
-        id: "Guilherme34/Hermes-3-Llama-3.1-70B-Uncensored",
-        model_class: "llama31-70b",
-        tool_use: true,
-    },
-    {
-        id: "Kizexc/Phoenix-Llama-3.1-70B-Uncensored",
-        model_class: "llama31-70b",
-        tool_use: true,
-    },
-    {
-        id: "AskVenice/venice-uncensored",
-        model_class: "mistral-24b",
-        tool_use: true,
-    },
-    {
-        id: "BlossomsAI/Qwen2.5-Coder-14B-Instruct-Uncensored",
-        model_class: "qwen25-14b",
-        tool_use: true,
-    },
-    {
-        id: "FiditeNemini/Qwen2.5-14B-DeepSeek-R1-1M-Uncensored",
-        model_class: "qwen25-14b",
-        tool_use: true,
-    },
-    {
-        id: "DavidAU/Gemma-3-27b-it-Uncensored-HERETIC-Gemini-Deep-Reasoning",
-        model_class: "gemma3-27b",
-        tool_use: true,
-    },
-    {
-        id: "InfinimindCreations/gemma-4-31B-it-uncensored",
-        model_class: "gemma4-31b",
-        tool_use: true,
-    },
-    {
-        id: "EldritchLabs/MN-12B-Mag-Mell-R1-Uncensored-Scale1.2",
-        model_class: "mistral-nemo",
-        tool_use: true,
-    },
-    {
-        id: "DavidAU/Qwen3.5-21B-Claude-4.6-Opus-Deckard-Heretic-Uncensored-Thinking",
-        model_class: "qwen3_5-27b",
-        tool_use: true,
-    },
-    {
-        id: "GitMylo/Qwen3.5-9B-Uncensored-HauhauCS-Aggressive-safetensors",
-        model_class: "qwen3_5-9b",
-        tool_use: true,
-    },
-    {
-        id: "ModelsLab/Llama-3-uncensored-Dare-1",
-        model_class: "llama3-8b",
-        tool_use: true,
-    },
-    {
-        id: "ChiKoi7/Llama-3.1-8B-Lexi-Uncensored-V2-Heretic",
-        model_class: "llama31-8b",
+        id: "llmfan46/Tower-Plus-72B-ultra-uncensored-heretic",
+        model_class: "qwen2-72b",
         tool_use: true,
     },
     {

@@ -1,6 +1,6 @@
 {
     "name": "@ryukin-dev/pi-featherless-kali",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "description": "Featherless Provider for Pi with accurate tokenization and concurrency tracking.",
     "type": "module",
     "main": "index.js",

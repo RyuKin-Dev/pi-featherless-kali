@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.9
+
+- Fix für Modelle ohne natives Tool-Calling (z. B. `llmfan46/Tower-Plus-72B-ultra-uncensored-heretic`):
+  - `qwen2-72b` zur Liste `MODELS_NEED_TOOL_CALL_PARSING` hinzugefügt.
+  - Markdown-Code-Blöcke (`\`\`\`bash ... \`\`\``) werden in echte `bash`-Tool-Calls umgewandelt.
+  - Stop-Reason wird bei erkannten Tool-Calls von `stop` auf `toolUse` gesetzt.
+
 ## 1.1.8
 
 - Neuer fester Shell-Helper `kali-sh` hinzugefügt:

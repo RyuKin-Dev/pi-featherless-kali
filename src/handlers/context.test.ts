@@ -6,11 +6,10 @@ import { getModelClass } from "../models";
 function parseToolCallsFromText(
     text: string,
 ): Array<{ id: string; name: string; arguments: Record<string, any> }> | null {
-    const regex = /<function>\s*(\{.*?\})\s*<\/function>/gs;
-    const matches = [...text.matchAll(regex)];
     const results = [];
 
-    for (const match of matches) {
+    const regex1 = /<function>\s*(\{.*?\})\s*<\/function>/gs;
+    for (const match of [...text.matchAll(regex1)]) {
         try {
             const data = JSON.parse(match[1]);
             if (data.name && data.arguments !== undefined) {
@@ -23,6 +22,35 @@ function parseToolCallsFromText(
                 });
             }
         } catch {
+        }
+    }
+
+    const regex2 = /<tool_call>\s*(\{.*?\})\s*<\/tool_call>/gs;
+    for (const match of [...text.matchAll(regex2)]) {
+        try {
+            const data = JSON.parse(match[1]);
+            if (data.name && data.arguments !== undefined) {
+                results.push({
+                    id: `call_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+                    name: data.name,
+                    arguments: typeof data.arguments === 'string'
+                        ? JSON.parse(data.arguments)
+                        : data.arguments,
+                });
+            }
+        } catch {
+        }
+    }
+
+    const regex3 = /```(?:bash|sh|shell)\s*\n([\s\S]*?)\n?```/gs;
+    for (const match of [...text.matchAll(regex3)]) {
+        const command = match[1].trim();
+        if (command) {
+            results.push({
+                id: `call_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+                name: "bash",
+                arguments: { command },
+            });
         }
     }
 
@@ -256,5 +284,47 @@ describe("getModelClass integration", () => {
     it("should return undefined for non-RWKV models", () => {
         expect(getModelClass("unknown/model")).toBeUndefined();
         expect(getModelClass("anthropic/claude-sonnet-4-5")).toBeUndefined();
+    });
+
+    it("should return correct model class for Tower-Plus and Qwen3", () => {
+        expect(getModelClass("llmfan46/Tower-Plus-72B-ultra-uncensored-heretic")).toBe("qwen2-72b");
+        expect(getModelClass("Qwen/Qwen3-32B")).toBe("qwen3-32b");
+    });
+});
+
+describe("markdown bash block parsing", () => {
+    it("should convert a bash fenced block into a bash tool call", () => {
+        const text = "```bash\ntouch /home/ryukin/Downloads/new_file.txt\n```";
+        const result = parseToolCallsFromText(text);
+
+        expect(result).not.toBeNull();
+        expect(result).toHaveLength(1);
+        expect(result![0].name).toBe("bash");
+        expect(result![0].arguments).toEqual({ command: "touch /home/ryukin/Downloads/new_file.txt" });
+    });
+
+    it("should parse sh and shell fenced blocks", () => {
+        const text = "```sh\nls -la\n```\n```shell\nuname -a\n```";
+        const result = parseToolCallsFromText(text);
+
+        expect(result).not.toBeNull();
+        expect(result).toHaveLength(2);
+        expect(result![0].arguments).toEqual({ command: "ls -la" });
+        expect(result![1].arguments).toEqual({ command: "uname -a" });
+    });
+
+    it("should ignore empty bash blocks", () => {
+        const text = "```bash\n```";
+        const result = parseToolCallsFromText(text);
+        expect(result).toBeNull();
+    });
+
+    it("should handle explanatory text around the bash block", () => {
+        const text = "Ich erstelle die Datei:\n```bash\ntouch /tmp/x.txt\n```\nErledigt.";
+        const result = parseToolCallsFromText(text);
+
+        expect(result).not.toBeNull();
+        expect(result).toHaveLength(1);
+        expect(result![0].arguments).toEqual({ command: "touch /tmp/x.txt" });
     });
 });

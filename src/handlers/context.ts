@@ -11,6 +11,7 @@ import { handleApiError } from "./concurrency";
 const MODELS_NEED_TOOL_CALL_PARSING = new Set([
     "qrwkv-72b-32k",
     "qrwkv-32b-32k",
+    "qwen2-72b",
     "qwen3-32b",
 ]);
 
@@ -50,6 +51,18 @@ function parseToolCallsFromText(
                 });
             }
         } catch {
+        }
+    }
+
+    const regex3 = /```(?:bash|sh|shell)\s*\n([\s\S]*?)\n?```/gs;
+    for (const match of [...text.matchAll(regex3)]) {
+        const command = match[1].trim();
+        if (command) {
+            results.push({
+                id: `call_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+                name: "bash",
+                arguments: { command },
+            });
         }
     }
 
